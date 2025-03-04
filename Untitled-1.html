@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /*CSS*/
+        html, body{
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin:0;
+        overflow: hidden;
+        font-family: Helvetica;
+        }
+        #tree{
+        width:100%;
+        height:100%;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://balkan.app/js/FamilyTree.js"></script>
+    <div id="tree"></div>
+    <script>
+        //JavaScript
+
+var family = new FamilyTree(document.getElementById('tree'), {
+    miniMap: true,
+    enableSearch: false,
+    mouseScrool: FamilyTree.action.ctrlZoom,
+    nodeBinding: {
+        field_0: "Name",
+        field_1: "birthDate",
+        
+    }
+});
+
+family.load(
+    [
+        /*{ id: 0, pids: [1], gender: 'male' },
+        { id: 1, pids: [0], gender: 'female' },
+        { id: 2, pids: [3], gender: 'female', fid: 0, mid: 1 },
+        { id: 3, pids: [2], gender: 'male' },
+        { id: 4, pids: [5], gender: 'male', fid: 3, mid: 2 },
+        { id: 5, pids: [4], gender: 'female', fid: 21, mid: 22 },
+        { id: 6, pids: [10, 11, 12, 13], gender: 'male', fid: 4, mid: 5 },
+        { id: 7, gender: 'female', fid: 4, mid: 5 },
+        { id: 8, gender: 'male', fid: 4, mid: 5 },
+        { id: 9, gender: 'male', fid: 4, mid: 5 },
+        { id: 10, pids: [6], gender: 'female' },
+        { id: 11, pids: [6], gender: 'female' },
+        { id: 12, pids: [6], gender: 'female' },
+        { id: 13, pids: [6], gender: 'female' },
+        { id: 14, gender: 'female', fid: 6, mid: 13 },
+        { id: 15, gender: 'male', fid: 6, mid: 13 },
+        { id: 16, gender: 'female', fid: 6, mid: 13 },
+        { id: 17, gender: 'male', fid: 6, mid: 13 },
+        { id: 18, gender: 'female', fid: 6, mid: 12 },
+        { id: 19, pids: [20], gender: 'male' },
+        { id: 20, pids: [19], gender: 'female' },
+        { id: 21, pids: [22], gender: 'male', fid: 19, mid: 20 },
+        { id: 22, pids: [21], gender: 'female' }*/
+        
+
+        { id: 0, gender: 'male', Name:'Abd Manaf ibn Qusai', birthDate:'430 - 480CE'},
+        { id: 1, gender: 'male', Name:'Hashim ibn Abd Manaf', fid: 0, birthDate:'464 - 497CE'},
+        { id: 2, gender: 'male', Name:'Abdul Muttalib', fid: 1, birthDate:'497 - 578CE'},
+        { id: 3, gender: 'female', Name:'Aminah bint Wahb', pids: [4], birthDate:'549 - 577CE'},
+        { id: 6, gender: 'male', Name:'Hamza ibn Abdul Muttalib', fid: 2, birthDate:'566 - 625CE'},
+        { id: 7, gender: 'male', Name:'Abbas ibn Abdul Muttalib', fid: 2, birthDate:'566 - 653CE'},
+        { id: 4, gender: 'male', Name:'Abdullah',pids: [3], fid: 2, birthDate:'545 - 570CE'},
+        { id: 5, gender: 'male', Name:'Abu Talib', fid: 2, birthDate:'539 - 619CE'},
+        { id: 8, gender: 'male', Name:'Safiyyah bint Abdul Muttalib', fid: 2, birthDate:'569 - 640CE'},
+        { id: 9, gender: 'male', Name:'Abu Lahab', fid: 2, birthDate:'549 - 624CE'},
+        { id: 10, gender: 'male', Name:'Prophet Muhammad ',pids: [11,12,13,14,15,16,17,18,19,20,21,22], fid: 4, mid: 3, birthDate:'570 - 632CE'},
+        { id: 11, gender: 'female', Name:'Khadijah bint Khuwaylid', pids: [10], birthDate:'555 - 619CE'},
+        { id: 12, gender: 'female', Name:'Sawda bint Zama', pids: [10], birthDate:'590 - 674CE'},
+        { id: 13, gender: 'female', Name:'Aisha bint Abu Bakr', pids: [10], birthDate:'613 - 678CE'},
+        { id: 14, gender: 'female', Name:'Hafsa bint Umar', pids: [10], birthDate:'605 - 665CE'},
+        { id: 15, gender: 'female', Name:'Zaynab bint Khuzayma', pids: [10], birthDate:'595 - 627CE'},
+        { id: 16, gender: 'female', Name:'Umm Salamah', pids: [10], birthDate:'596 - 680CE'},
+        { id: 17, gender: 'female', Name:'Zaynab bint Jahsh', pids: [10], birthDate:'590 - 641CE'},
+        { id: 18, gender: 'female', Name:'Juwayriyah bint al-Harith', pids: [10], birthDate:'608 - 676CE'},
+        { id: 19, gender: 'female', Name:'Umm Habibah', pids: [10], birthDate:'589 - 665CE'},
+        { id: 20, gender: 'female', Name:'Safiyyah bint Huyayy', pids: [10], birthDate:'610 - 670CE'},
+        { id: 21, gender: 'female', Name:'Maymunah bint al-Harith', pids: [10], birthDate:'594 - 674CE'},
+        { id: 22, gender: 'female', Name:'Maria al-Qibtiyya', pids: [10], birthDate:'647CE'},
+        { id: 23, gender: 'male', Name:'Qasim', fid: 10,mid: 11, birthDate:'598 - 600CE'},
+        { id: 24, gender: 'male', Name:'Zainab', fid: 10,mid: 11, birthDate:'599 - 629CE'},
+        { id: 25, gender: 'male', Name:'Ruqayyah', fid: 10,mid: 11, birthDate:'601 - 624CE'},
+        { id: 26, gender: 'male', Name:'Umm Kulthum', fid: 10,mid: 11, birthDate:'603 - 630CE'},
+        { id: 27, gender: 'female', Name:'Fatimah', fid: 10,mid: 11, birthDate:'605 - 632CE'},
+        { id: 28, gender: 'male', Name:'Abdullah', fid: 10,mid: 11, birthDate:'611 - 615CE'},
+        { id: 29, gender: 'male', Name:'Hasan',mid: 27, birthDate:'625 - 670CE'},
+        { id: 30, gender: 'male', Name:'Husayn',mid: 27, birthDate:'626 - 680CE'},
+        
+    ]
+);
+    </script>
+</body>
+</html>
