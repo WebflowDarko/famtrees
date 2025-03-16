@@ -80,6 +80,10 @@
     #family-tree {
       height: 100vh;
     }
+    #tree-content {
+      will-change: transform;
+    }
+
 }
 
   </style>
@@ -1600,7 +1604,6 @@
   let currentScale = 1;
   let pinchMidpoint = { x: 0, y: 0 };
 
-  // Pomoćne funkcije za računanje rastojanja i srednje tačke između dva dodira
   function getDistance(t1, t2) {
     return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
   }
@@ -1613,17 +1616,20 @@
   }
 
   function applyTransform() {
-    treeContent.setAttribute('transform', `translate(${currentTranslate.x}, ${currentTranslate.y}) scale(${currentScale})`);
+    // Koristi requestAnimationFrame za glatku animaciju
+    requestAnimationFrame(() => {
+      treeContent.setAttribute('transform', `translate(${currentTranslate.x}, ${currentTranslate.y}) scale(${currentScale})`);
+    });
   }
 
   container.addEventListener('touchstart', function(e) {
     if (e.touches.length === 1) {
-      // Pomeranje – sa jednim prstom
+      // Početak panovanja sa jednim prstom
       isPanning = true;
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
     } else if (e.touches.length === 2) {
-      // Zumiranje – sa dva prsta
+      // Početak zumiranja sa dva prsta
       isZooming = true;
       initialTouchDistance = getDistance(e.touches[0], e.touches[1]);
       initialScale = currentScale;
@@ -1632,7 +1638,6 @@
   }, false);
 
   container.addEventListener('touchmove', function(e) {
-    // Sprečava podrazumevano ponašanje (npr. scroll)
     e.preventDefault();
     if (isPanning && e.touches.length === 1) {
       const dx = e.touches[0].clientX - startX;
@@ -1645,9 +1650,7 @@
       const scaleFactor = newDistance / initialTouchDistance;
       currentScale = initialScale * scaleFactor;
 
-      // Opcionalno: prilagodite translation tako da srednja tačka (pinch midpoint)
-      // ostane fiksirana – ovde se jednostavno pomera transformacija za razliku
-      // između početne i nove srednje tačke.
+      // Opcionalno: prilagođavanje translation-a tako da srednja tačka ostane fiksirana
       const newMidpoint = getMidpoint(e.touches[0], e.touches[1]);
       currentTranslate.x = lastTranslate.x + (newMidpoint.x - pinchMidpoint.x);
       currentTranslate.y = lastTranslate.y + (newMidpoint.y - pinchMidpoint.y);
@@ -1658,13 +1661,13 @@
 
   container.addEventListener('touchend', function(e) {
     if (e.touches.length === 0) {
-      // Sve dodire su prestali – čuvamo trenutnu poziciju
+      // Svi dodiri su završeni – čuvamo trenutne vrednosti
       isPanning = false;
       isZooming = false;
       lastTranslate.x = currentTranslate.x;
       lastTranslate.y = currentTranslate.y;
     } else if (e.touches.length === 1) {
-      // Prelazak sa zoom-a na panning kada ostane jedan prst
+      // Ako preostane jedan prst, prelazimo sa zooma na panovanje
       isZooming = false;
       isPanning = true;
       startX = e.touches[0].clientX;
@@ -1674,6 +1677,7 @@
     }
   }, false);
 }
+
 
 
 </script>
