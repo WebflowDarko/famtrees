@@ -1504,12 +1504,16 @@
   }
 
   window.addEventListener('load', () => {
-  // Ovde, recimo, pomeriš ceo prikaz za -400 na X osi (što znači "u levo"),
-  // pa će se Prophet Muhammad pojaviti više u centru ekrana.
-  panX = -700;
-  panY = 100;
-  scale = 0.8; // ako hoćeš i početno uvećanje
-  updateTransform();
+  // Pokreni "desktop" logiku samo ako je širina ekrana ≥ 1024
+  if (window.innerWidth >= 1024) {
+    // Ova logika će se odnositi samo na desktop
+
+    // Primer: Pomeranje family-tree "u levo" za 400px, skaliranje na 1
+    panX = -400;
+    panY = 0;
+    scale = 1;
+    updateTransform();
+  }
 });
 
 
@@ -1608,14 +1612,22 @@
   const container = document.getElementById('family-tree-container');
   const treeContent = document.getElementById('tree-content');
 
+  // Definišite početnu poziciju koju želite da family tree ima
+  const initialTranslate = { x: -1000, y: -200 }; // prilagodite po potrebi
+  const initialScale = 1;
+
+  // Postavite početne varijable i odmah primenite transformaciju
+  let lastTranslate = { ...initialTranslate };
+  let currentTranslate = { ...initialTranslate };
+  let currentScale = initialScale;
+  
+  // Primena početne transformacije
+  treeContent.setAttribute('transform', `translate(${currentTranslate.x}, ${currentTranslate.y}) scale(${currentScale})`);
+
   let isPanning = false;
   let isZooming = false;
   let startX = 0, startY = 0;
-  let lastTranslate = { x: 0, y: 0 };
-  let currentTranslate = { x: 0, y: 0 };
   let initialTouchDistance = 0;
-  let initialScale = 1;
-  let currentScale = 1;
   let pinchMidpoint = { x: 0, y: 0 };
 
   function getDistance(t1, t2) {
@@ -1630,7 +1642,6 @@
   }
 
   function applyTransform() {
-    // Koristi requestAnimationFrame za glatku animaciju
     requestAnimationFrame(() => {
       treeContent.setAttribute('transform', `translate(${currentTranslate.x}, ${currentTranslate.y}) scale(${currentScale})`);
     });
@@ -1638,15 +1649,15 @@
 
   container.addEventListener('touchstart', function(e) {
     if (e.touches.length === 1) {
-      // Početak panovanja sa jednim prstom
+      // Pomeranje sa jednim prstom
       isPanning = true;
+      // Koristimo trenutnu poziciju kao bazu, a ne ponovo postavljamo lastTranslate
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
     } else if (e.touches.length === 2) {
-      // Početak zumiranja sa dva prsta
+      // Zumiranje sa dva prsta
       isZooming = true;
       initialTouchDistance = getDistance(e.touches[0], e.touches[1]);
-      initialScale = currentScale;
       pinchMidpoint = getMidpoint(e.touches[0], e.touches[1]);
     }
   }, false);
@@ -1663,25 +1674,25 @@
       const newDistance = getDistance(e.touches[0], e.touches[1]);
       const scaleFactor = newDistance / initialTouchDistance;
       currentScale = initialScale * scaleFactor;
-
-      // Opcionalno: prilagođavanje translation-a tako da srednja tačka ostane fiksirana
+      
+      // Prilagođavanje translacije da se zadrži srednja tačka dodira
       const newMidpoint = getMidpoint(e.touches[0], e.touches[1]);
       currentTranslate.x = lastTranslate.x + (newMidpoint.x - pinchMidpoint.x);
       currentTranslate.y = lastTranslate.y + (newMidpoint.y - pinchMidpoint.y);
-
+      
       applyTransform();
     }
   }, false);
 
   container.addEventListener('touchend', function(e) {
     if (e.touches.length === 0) {
-      // Svi dodiri su završeni – čuvamo trenutne vrednosti
+      // Sve dodire su završene – ažuriramo bazne vrednosti
       isPanning = false;
       isZooming = false;
       lastTranslate.x = currentTranslate.x;
       lastTranslate.y = currentTranslate.y;
     } else if (e.touches.length === 1) {
-      // Ako preostane jedan prst, prelazimo sa zooma na panovanje
+      // Prelazak sa zooma na panning: postavljamo novu bazu
       isZooming = false;
       isPanning = true;
       startX = e.touches[0].clientX;
