@@ -777,6 +777,8 @@
 </div>
 
 <script>
+
+  const svgEl = document.getElementById("family-tree");
   const container = document.getElementById('family-tree-container');
   const svg = document.getElementById('family-tree');
   const treeContent = document.getElementById('tree-content');
@@ -801,6 +803,8 @@
   function updateTransform() {
     treeContent.setAttribute('transform', `translate(${panX}, ${panY}) scale(${scale})`);
   }
+
+  
 
   window.addEventListener('load', () => {
   // Pokreni "desktop" logiku samo ako je širina ekrana ≥ 1024
@@ -1003,8 +1007,9 @@
 }
 
 setTimeout(() => {
-    svg.click();
-}, 1000)
+    svgEl.style.transform = "translateZ(0)";
+    console.log("klik izvrsen")
+}, 200)
 </script>
 
 </body>
