@@ -770,6 +770,7 @@
 </div>
 
 <script>
+  const svgEl = document.getElementById("family-tree");
   const container = document.getElementById('family-tree-container');
   const svg = document.getElementById('family-tree');
   const treeContent = document.getElementById('tree-content');
@@ -995,7 +996,10 @@
   }, false);
 }
 
-
+setTimeout(() => {
+    svgEl.style.transform = "translateZ(0)";
+    console.log("klik izvrsen")
+}, 200)
 
 </script>
 
